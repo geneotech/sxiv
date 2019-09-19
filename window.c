@@ -117,8 +117,8 @@ void win_init(win_t *win)
 	f = win_res(e->dpy, RES_CLASS ".font", "monospace-8");
 	win_init_font(e, f);
 
-	bg = win_res(e->dpy, RES_CLASS ".background", "white");
-	fg = win_res(e->dpy, RES_CLASS ".foreground", "black");
+	bg = win_res(e->dpy, RES_CLASS ".background", "black");
+	fg = win_res(e->dpy, RES_CLASS ".foreground", "white");
 	win_alloc_color(e, bg, &win->bg);
 	win_alloc_color(e, fg, &win->fg);
 
@@ -395,7 +395,7 @@ void win_draw_bar(win_t *win)
 	d = XftDrawCreate(e->dpy, win->buf.pm, DefaultVisual(e->dpy, e->scr),
 	                  DefaultColormap(e->dpy, e->scr));
 
-	XSetForeground(e->dpy, gc, win->fg.pixel);
+	XSetForeground(e->dpy, gc, win->bg.pixel);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, win->h, win->w, win->bar.h);
 
 	XSetForeground(e->dpy, gc, win->bg.pixel);
@@ -406,12 +406,12 @@ void win_draw_bar(win_t *win)
 			return;
 		x = win->w - tw - H_TEXT_PAD;
 		w -= tw;
-		win_draw_text(win, d, &win->bg, x, y, r->buf, len, tw);
+		win_draw_text(win, d, &win->fg, x, y, r->buf, len, tw);
 	}
 	if ((len = strlen(l->buf)) > 0) {
 		x = H_TEXT_PAD;
 		w -= 2 * H_TEXT_PAD; /* gap between left and right parts */
-		win_draw_text(win, d, &win->bg, x, y, l->buf, len, w);
+		win_draw_text(win, d, &win->fg, x, y, l->buf, len, w);
 	}
 	XftDrawDestroy(d);
 }
